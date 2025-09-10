@@ -7,4 +7,4 @@
 ./gradlew build
 
 ### Запуск проекта:
-./gradlew build
+./gradlew run
