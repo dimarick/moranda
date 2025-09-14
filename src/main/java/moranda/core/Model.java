@@ -18,16 +18,15 @@ public class Model {
     public EstimationResult estimate(double[] bugIntervals) {
 
         var B0 = bugIntervals.length;
-        var BStep = B0;
 
         var actualTime = actualTime(bugIntervals);
 
         var B = solve(
             B0,
-            BStep,
+            B0,
             0.01,
             (Double Bj) -> expectedTime(Bj, bugIntervals),
-            (Double Bj) -> actualTime
+            (Double) -> actualTime
         );
 
         if (!Double.isFinite(B)) {
@@ -103,8 +102,8 @@ public class Model {
 
     public double actualTime(double[] X) {
         double sum = 0.0;
-        for (int i = 0; i < X.length; i++) {
-            sum += X[i];
+        for (double x : X) {
+            sum += x;
         }
 
         return sum;
