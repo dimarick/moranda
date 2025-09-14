@@ -22,7 +22,7 @@ public class Model {
         var actualTime = actualTime(bugIntervals);
 
         var B = solve(
-            B0,
+            0,
             B0,
             0.01,
             (Double Bj) -> expectedTime(Bj, bugIntervals),
@@ -49,23 +49,25 @@ public class Model {
         var totalTestingTime = (1. / K) * sumTimes;
 
         return new EstimationResult(
-                B,
-                nextBugTime,
-                totalTestingTime
+            B,
+            nextBugTime,
+            totalTestingTime
         );
     }
 
-    private double solve(double B, double BStep, double minBStep, Function<Double, Double> a, Function<Double, Double> b) {
+    private double solve(double initialB, double initialBStep, double minBStep, Function<Double, Double> a, Function<Double, Double> b) {
         double prevSign = 0.0;
         double maxValue = 0.0;
+        var B = initialB;
+        var BStep = initialBStep;
         do {
             B += BStep;
             Double aa = a.apply(B);
             Double bb = b.apply(B);
             double newSign = Math.signum(aa - bb);
 
-            if (B > 1e8) {
-                return Double.POSITIVE_INFINITY;
+            if (B > 1e6) {
+                return solve(initialB, initialBStep / 3, minBStep, a, b);
             }
 
             if (newSign == 0.0) {
