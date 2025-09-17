@@ -2,29 +2,19 @@ package core;
 
 import dto.EstimationResult;
 public class Model {
-    public EstimationResult estimate(int[] bugIntervals) {
-        if (bugIntervals == null || bugIntervals.length == 0) {
+    public EstimationResult estimate(double[] bugIntervals) {
+
             return new EstimationResult(0, 0, 0);
-        }
 
-
-
-        int detectedBugs = bugIntervals.length;
-        int estimatedTotalBugs = (int) (detectedBugs * 1.5) + 1; // Предполагаем, что есть еще ошибки
-        int averageInterval = calculateAverageInterval(bugIntervals);
-        int nextBugTime = averageInterval;
-        int totalTestingTime = averageInterval * (estimatedTotalBugs - detectedBugs);
-
-        return new EstimationResult(estimatedTotalBugs, nextBugTime, totalTestingTime);
     }
 
-    private int calculateAverageInterval(int[] intervals) {
+    private double calculateAverageInterval(double[] intervals) {
         if (intervals.length == 0) return 0;
 
         long sum = 0;
-        for (int interval : intervals) {
-            sum += interval;
+        for (double interval : intervals) {
+            sum += (long) interval;
         }
-        return (int) (sum / intervals.length);
+        return (double) (sum / intervals.length);
     }
 }

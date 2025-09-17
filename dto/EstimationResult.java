@@ -1,39 +1,39 @@
 package dto;
 
 public class EstimationResult {
-    private int totalBugs;
-    private int nextBugTime;
-    private int totalTestingTime;
+    private double totalBugs;
+    private double nextBugTime;
+    private double totalTestingTime;
 
     public EstimationResult() {}
 
-    public EstimationResult(int totalBugs, int nextBugTime, int totalTestingTime) {
+    public EstimationResult(double totalBugs, double nextBugTime, double totalTestingTime) {
         this.totalBugs = totalBugs;
         this.nextBugTime = nextBugTime;
         this.totalTestingTime = totalTestingTime;
     }
 
-    public int getTotalBugs() {
+    public double getTotalBugs() {
         return totalBugs;
     }
 
-    public int getNextBugTime() {
+    public double getNextBugTime() {
         return nextBugTime;
     }
 
-    public int getTotalTestingTime() {
+    public double getTotalTestingTime() {
         return totalTestingTime;
     }
 
-    public void setTotalBugs(int totalBugs) {
+    public void setTotalBugs(double totalBugs) {
         this.totalBugs = totalBugs;
     }
 
-    public void setNextBugTime(int nextBugTime) {
+    public void setNextBugTime(double nextBugTime) {
         this.nextBugTime = nextBugTime;
     }
 
-    public void setTotalTestingTime(int totalTestingTime) {
+    public void setTotalTestingTime(double totalTestingTime) {
         this.totalTestingTime = totalTestingTime;
     }
 }
