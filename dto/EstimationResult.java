@@ -1,11 +1,9 @@
 package dto;
 
 public class EstimationResult {
-    private double totalBugs;
-    private double nextBugTime;
-    private double totalTestingTime;
-
-    public EstimationResult() {}
+    private final double totalBugs;
+    private final double nextBugTime;
+    private final double totalTestingTime;
 
     public EstimationResult(double totalBugs, double nextBugTime, double totalTestingTime) {
         this.totalBugs = totalBugs;
@@ -25,15 +23,5 @@ public class EstimationResult {
         return totalTestingTime;
     }
 
-    public void setTotalBugs(double totalBugs) {
-        this.totalBugs = totalBugs;
-    }
-
-    public void setNextBugTime(double nextBugTime) {
-        this.nextBugTime = nextBugTime;
-    }
-
-    public void setTotalTestingTime(double totalTestingTime) {
-        this.totalTestingTime = totalTestingTime;
-    }
 }
+
