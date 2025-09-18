@@ -1,16 +1,10 @@
 package main.java;
-
-import core.Model;
-import dto.EstimationResult;
-
+import main.java.EstimationResult;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-
 import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) {
-
         try {
             var scanner = new Scanner(System.in);
             var intervalsList = new ArrayList<Double>();
@@ -33,22 +27,16 @@ public class Main {
                 }
             }
             scanner.close();
-
             var bugIntervals = intervalsList.stream().mapToDouble(Double::doubleValue).toArray();
-
             var model = new Model();
             EstimationResult result = model.estimate(bugIntervals);
-
             System.out.println("Общее число ошибок в программной системе: " + result.getTotalBugs());
             System.out.println("Время до появления следующей ошибки: " + result.getNextBugTime());
             System.out.println("Время до окончания тестирования: " + result.getTotalTestingTime());
-
         } catch (Exception e) {
             System.err.println("Произошла ошибка: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
 }
-
-
-
