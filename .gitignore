@@ -1,9 +1,12 @@
 # Gradle
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
+gradlew
+gradlew.bat
 .gradle/
 build/
-!gradle/wrapper/gradle-wrapper.jar
 
-# Intellij IDEA
+# IDE files
 .idea/
 *.iml
 *.iws
@@ -12,10 +15,7 @@ build/
 *.class
 
 # Log file
-logs/
 *.log
-*.tmp
-*.temp
 
 # BlueJ files
 *.ctxt
