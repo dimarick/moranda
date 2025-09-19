@@ -1,8 +1,6 @@
 package main.java;
 import main.java.core.Model;
 import main.java.dto.EstimationResult;
-
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Scanner;
 public class Main {
@@ -21,10 +19,9 @@ public class Main {
                 try {
                     var value = Integer.parseInt(line);
                     if (value < 0 || value > 2000000000) {
-                        throw new InvalidParameterException("Предупреждение: число " + value + " вне диапазона 0-2000000000");
+                        throw new IllegalArgumentException("Предупреждение: число " + value + " вне диапазона 0-2000000000");
                     }
                     intervalsList.add((double) value);
-                    ;
                 } catch (NumberFormatException e) {
                     throw new IllegalArgumentException("Ошибка: неверный формат числа - '" + line + "'", e);
                 }
@@ -36,12 +33,13 @@ public class Main {
             System.out.println("Общее число ошибок в программной системе: " + result.getTotalBugs());
             System.out.println("Время до появления следующей ошибки: " + result.getNextBugTime());
             System.out.println("Время до окончания тестирования: " + result.getTotalTestingTime());
-        }
-     catch (IllegalArgumentException e) {
-         throw e;
-     } catch (Exception e) {
-            System.err.println("Произошла ошибка: " + e.getMessage());
-            e.printStackTrace();
-        }
+     }  catch (Throwable e) {
+        var err = e;
+        do {
+            System.err.println("Произошла ошибка: " + err.getMessage());
+            err.printStackTrace();
+            err = err.getCause();
+        } while (err != null);
+    }
     }
 }
