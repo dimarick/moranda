@@ -32,7 +32,7 @@ public class Main {
             scanner.close();
             var bugIntervals = intervalsList.stream().mapToDouble(Double::doubleValue).toArray();
             var model = new Model();
-            EstimationResult result = model.estimate(bugIntervals);
+            var result = model.estimate(bugIntervals);
             System.out.println("Общее число ошибок в программной системе: " + result.getTotalBugs());
             System.out.println("Время до появления следующей ошибки: " + result.getNextBugTime());
             System.out.println("Время до окончания тестирования: " + result.getTotalTestingTime());
