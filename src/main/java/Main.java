@@ -1,5 +1,7 @@
 package main.java;
-import main.java.EstimationResult;
+import main.java.core.Model;
+import main.java.dto.EstimationResult;
+
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -13,7 +15,7 @@ public class Main {
                 if (line.isEmpty()) {
                     continue;
                 }
-                if (line.equals("^D") || !scanner.hasNextLine()) {
+                if (line.equals("^D")) {
                     break;
                 }
                 try {
@@ -38,5 +40,4 @@ public class Main {
             e.printStackTrace();
         }
     }
-
 }

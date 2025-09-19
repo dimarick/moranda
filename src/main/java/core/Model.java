@@ -1,5 +1,6 @@
-package main.java;
-import main.java.EstimationResult;
+package main.java.core;
+
+import main.java.dto.EstimationResult;
 
 public class Model {
     public EstimationResult estimate(double[] bugIntervals) {

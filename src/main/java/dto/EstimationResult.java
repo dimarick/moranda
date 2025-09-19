@@ -1,4 +1,4 @@
-package main.java;
+package main.java.dto;
 
 public class EstimationResult {
     private final double totalBugs;
