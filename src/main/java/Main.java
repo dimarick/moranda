@@ -23,9 +23,10 @@ public class Main {
                     if (value < 0 || value > 2000000000) {
                         throw new InvalidParameterException("Предупреждение: число " + value + " вне диапазона 0-2000000000");
                     }
-                    intervalsList.add((double) value);;
+                    intervalsList.add((double) value);
+                    ;
                 } catch (NumberFormatException e) {
-                    throw new InvalidParameterException("Ошибка: неверный формат числа - '" + line + "' "+e);
+                    throw new IllegalArgumentException("Ошибка: неверный формат числа - '" + line + "'", e);
                 }
             }
             scanner.close();
@@ -35,7 +36,10 @@ public class Main {
             System.out.println("Общее число ошибок в программной системе: " + result.getTotalBugs());
             System.out.println("Время до появления следующей ошибки: " + result.getNextBugTime());
             System.out.println("Время до окончания тестирования: " + result.getTotalTestingTime());
-        } catch (Exception e) {
+        }
+     catch (IllegalArgumentException e) {
+         throw e;
+     } catch (Exception e) {
             System.err.println("Произошла ошибка: " + e.getMessage());
             e.printStackTrace();
         }
