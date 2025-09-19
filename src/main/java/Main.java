@@ -1,7 +1,6 @@
 package main.java;
 
 import main.java.core.Model;
-import main.java.dto.EstimationResult;
 
 import java.util.ArrayList;
 import java.util.Scanner;
