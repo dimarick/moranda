@@ -1,8 +1,11 @@
 package main.java;
+
 import main.java.core.Model;
 import main.java.dto.EstimationResult;
+
 import java.util.ArrayList;
 import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
         try {
@@ -33,13 +36,13 @@ public class Main {
             System.out.println("Общее число ошибок в программной системе: " + result.getTotalBugs());
             System.out.println("Время до появления следующей ошибки: " + result.getNextBugTime());
             System.out.println("Время до окончания тестирования: " + result.getTotalTestingTime());
-     }  catch (Throwable e) {
-        var err = e;
-        do {
-            System.err.println("Произошла ошибка: " + err.getMessage());
-            err.printStackTrace();
-            err = err.getCause();
-        } while (err != null);
-    }
+        } catch (Throwable e) {
+            var err = e;
+            do {
+                System.err.println("Произошла ошибка: " + err.getMessage());
+                err.printStackTrace();
+                err = err.getCause();
+            } while (err != null);
+        }
     }
 }
