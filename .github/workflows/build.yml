@@ -27,10 +27,10 @@ jobs:
         run: sudo apt update && sudo apt install -y gradle
 
       - name: Проверка версии Gradle
-        run: --gradle-version
+        run: gradle --version
 
       - name: Установка Gradle wrapper
-        run: gradle wrapper --gradle-version=8.5
+        run: gradle wrapper --gradle-version=8.13
 
       - name:  Предоставление прав для gradlew
         run: chmod +x gradlew
