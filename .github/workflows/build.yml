@@ -23,6 +23,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Установить Gradle
+        run: sudo apt update && sudo apt install -y gradle
+
+      - name: Создать Gradle Wrapper
+        run: gradle wrapper
+
       - name: Дать права на gradlew
         run: chmod +x gradlew
 
