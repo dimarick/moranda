@@ -25,7 +25,7 @@ public class Main {
                     }
                     intervalsList.add((double) value);;
                 } catch (NumberFormatException e) {
-                    throw new InvalidParameterException("Ошибка: неверный формат числа - '" + line + "'");
+                    throw new InvalidParameterException("Ошибка: неверный формат числа - '" + line + "' "+e);
                 }
             }
             scanner.close();
