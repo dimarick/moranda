@@ -24,7 +24,9 @@ jobs:
           distribution: 'temurin'
 
       - name: Установаить Gradle
-        run: sudo apt update && sudo apt install -y gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: '8.13'
 
       - name: Проверка версии Gradle
         run: gradle --version
