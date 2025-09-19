@@ -26,7 +26,7 @@ jobs:
       - name: Установаить Gradle Wrapper
         run: |
           sudo apt update && sudo apt install -y gradle
-          gradle wrapper --gradle-version=9.0.0
+          gradle wrapper --gradle-version=8.5
           chmod +x gradlew
 
       - name: Запустить тесты
