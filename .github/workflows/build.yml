@@ -26,8 +26,8 @@ jobs:
       - name: Установить Gradle
         run: sudo apt update && sudo apt install -y gradle
 
-      - name: Дать права на gradlew
-        run: chmod +x gradlew
+      - name: Дать права на gradle
+        run: chmod +x gradle
 
       - name: Запустить тесты
-        run: ./gradlew test
+        run: ./gradle test
