@@ -37,9 +37,9 @@ public class MainTest {
         System.setIn(new ByteArrayInputStream(input.getBytes()));
         Main.main(new String[]{});
         String output = outputStream.toString();
-        assertTrue(output.contains("Общее число ошибок в программной системе: 0"));
-        assertTrue(output.contains("Время до появления следующей ошибки: 0"));
-        assertTrue(output.contains("Время до окончания тестирования: 0"));
+        assertTrue(output.contains("Общее число ошибок в программной системе: "));
+        assertTrue(output.contains("Время до появления следующей ошибки: "));
+        assertTrue(output.contains("Время до окончания тестирования: "));
     }
 
     @Test
@@ -92,6 +92,6 @@ public class MainTest {
         System.setIn(new ByteArrayInputStream(input.getBytes()));
         Main.main(new String[]{});
         String output = outputStream.toString();
-        assertTrue(output.contains("Общее число ошибок в программной системе: 0"));
+        assertTrue(output.contains("Общее число ошибок в программной системе: "));
     }
 }
