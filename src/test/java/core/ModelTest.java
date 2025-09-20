@@ -1,4 +1,4 @@
-package moranda.core;
+package core;
 
 import org.junit.jupiter.api.Test;
 

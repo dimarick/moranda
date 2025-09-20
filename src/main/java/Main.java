@@ -1,6 +1,4 @@
-package main.java;
-
-import main.java.core.Model;
+import core.Model;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -39,6 +37,7 @@ public class Main {
             var err = e;
             do {
                 System.err.println("Произошла ошибка: " + err.getMessage());
+                //noinspection CallToPrintStackTrace
                 err.printStackTrace();
                 err = err.getCause();
             } while (err != null);
