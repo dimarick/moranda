@@ -1,30 +1,37 @@
+[![CI сборка для проекта](https://github.com/dimarick/moranda/actions/workflows/build.yml/badge.svg)](https://github.com/dimarick/moranda/actions/workflows/build.yml)
+
 # moranda
 ЗАДАНИЕ НА ЛАБОРАТОРНУЮ РАБОТУ №2 (дисциплина “Проектирование информационных систем”)  Тема: Модель Джелинского-Моранды
 
 ## Установка и настройка Gradle Wrapper
 
 ### В корне проекта выполните:
-gradle wrapper --gradle-version=9.0.0
+`gradle wrapper --gradle-version=9.0.0`
 
 ### Или для последней версии:
-gradle wrapper
+`gradle wrapper`
 
 ### Проверка Gradle Wrapper
-./gradlew --version
+`./gradlew --version`
 
 ### Проверка системного Gradle
-gradle --version
+`gradle --version`    
 
 ## Инструкция по сборке и запуску
 
 ### Сборка проекта:
-./gradlew build
+`./gradlew build`
 
 ### Запуск проекта:
-./gradlew run
+
+Режим ручного ввода:
+
+`./gradlew run`
+
+Тест 
 
 ### Запуск тестов:
-./gradlew test
+`./gradlew run < variant1.txt`
 
 # Номер команды
 Команда №6
