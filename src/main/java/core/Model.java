@@ -57,31 +57,31 @@ public class Model {
         );
     }
 
-    private double solve(double initialB, double initialBStep, double minBStep, Function<Double, Double> a, Function<Double, Double> b) {
-        return solve(initialB, initialBStep, minBStep, a, b, 0);
+    private double solve(double initialX, double initialXStep, double minXStep, Function<Double, Double> a, Function<Double, Double> b) {
+        return solve(initialX, initialXStep, minXStep, a, b, 0);
     }
 
-    private double solve(double initialB, double initialBStep, double minBStep, Function<Double, Double> a, Function<Double, Double> b, int retry) {
+    private double solve(double initialX, double initialXStep, double minXStep, Function<Double, Double> a, Function<Double, Double> b, int retry) {
         if (retry >= MAX_RETRIES) {
             throw new RuntimeException("Too many retries");
         }
 
         double prevSign = 0.0;
         double maxValue = 0.0;
-        var B = initialB;
-        var BStep = initialBStep;
+        var X = initialX;
+        var XStep = initialXStep;
         do {
-            B += BStep;
-            Double aa = a.apply(B);
-            Double bb = b.apply(B);
-            double newSign = Math.signum(aa - bb);
+            X += XStep;
+            Double valueA = a.apply(X);
+            Double valueB = b.apply(X);
+            double newSign = Math.signum(valueA - valueB);
 
-            if (B > MAX_POSSIBLE_BUG_COUNT) {
-                return solve(initialB, initialBStep / 3, minBStep, a, b, retry + 1);
+            if (X > MAX_POSSIBLE_BUG_COUNT) {
+                return solve(initialX, initialXStep / 3, minXStep, a, b, retry + 1);
             }
 
             if (newSign == 0.0) {
-                return B;
+                return X;
             }
 
             if (prevSign == 0.0) {
@@ -89,18 +89,18 @@ public class Model {
             }
 
             if (prevSign != newSign) {
-                maxValue = B;
+                maxValue = X;
             }
 
             if (maxValue > 0.0) {
-                BStep *= prevSign * newSign * 0.5;
+                XStep *= prevSign * newSign * 0.5;
             } else {
-                BStep *= 2;
+                XStep *= 2;
             }
             prevSign = newSign;
-        } while (Math.abs(BStep) > minBStep);
+        } while (Math.abs(XStep) > minXStep);
 
-        return B;
+        return X;
     }
 
     public double expectedTime(double B, double[] X) {
