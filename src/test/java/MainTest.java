@@ -47,8 +47,8 @@ public class MainTest {
         String input = "^D\n";
         System.setIn(new ByteArrayInputStream(input.getBytes()));
         Main.main(new String[]{});
-        String output = outputStream.toString();
-        assertTrue(output.contains("Общее число ошибок в программной системе: 0"));
+        String output = errorStream.toString();
+        assertTrue(output.contains("Недостаточно данных для оценки"));
     }
 
     @Test

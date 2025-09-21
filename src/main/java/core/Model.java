@@ -17,6 +17,10 @@ public class Model {
      *     7) R(t)=const в интервале между двумя смежными моментами появления ошибок.
      */
     public dto.EstimationResult estimate(double[] bugIntervals) {
+        if (bugIntervals.length < 3) {
+            throw new IllegalArgumentException("Недостаточно данных для оценки");
+        }
+
         var actualTime = actualTime(bugIntervals);
 
         var B = solve(
