@@ -3,6 +3,10 @@ package core;
 import java.util.function.Function;
 
 public class Model {
+
+    public static final double MAX_POSSIBLE_BUG_COUNT = 1e6;
+    public static final double MAX_RETRIES = 20;
+
     /**
      * Модель Джелинского-Моранды – одна из первых и наиболее простых моделей классического типа. Модель использовалась при разработке ПО для весьма ответственных проектов, в частности для ряда модулей программы Apollo. В ее основу были положены следующие допущения:
      *     1) функция риска или иначе – интенсивность обнаружения ошибок R(t) пропорциональна текущему числу ошибок в программе, т.е. числу оставшихся (первоначальных) ошибок минус обнаруженные;
@@ -54,6 +58,14 @@ public class Model {
     }
 
     private double solve(double initialB, double initialBStep, double minBStep, Function<Double, Double> a, Function<Double, Double> b) {
+        return solve(initialB, initialBStep, minBStep, a, b, 0);
+    }
+
+    private double solve(double initialB, double initialBStep, double minBStep, Function<Double, Double> a, Function<Double, Double> b, int retry) {
+        if (retry >= MAX_RETRIES) {
+            throw new RuntimeException("Too many retries");
+        }
+
         double prevSign = 0.0;
         double maxValue = 0.0;
         var B = initialB;
@@ -64,8 +76,8 @@ public class Model {
             Double bb = b.apply(B);
             double newSign = Math.signum(aa - bb);
 
-            if (B > 1e6) {
-                return solve(initialB, initialBStep / 3, minBStep, a, b);
+            if (B > MAX_POSSIBLE_BUG_COUNT) {
+                return solve(initialB, initialBStep / 3, minBStep, a, b, retry + 1);
             }
 
             if (newSign == 0.0) {
