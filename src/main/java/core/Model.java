@@ -23,7 +23,7 @@ public class Model {
             bugIntervals.length + 1,
             0.01,
             (Double Bj) -> expectedTime(Bj, bugIntervals),
-            (_) -> actualTime
+            (Double) -> actualTime
         );
 
         var K = K(B, bugIntervals);
