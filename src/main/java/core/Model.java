@@ -5,7 +5,6 @@ import java.util.function.Function;
 public class Model {
 
     public static final double MAX_POSSIBLE_BUG_COUNT = 1e6;
-    public static final double MAX_RETRIES = 20;
 
     /**
      * Модель Джелинского-Моранды – одна из первых и наиболее простых моделей классического типа. Модель использовалась при разработке ПО для весьма ответственных проектов, в частности для ряда модулей программы Apollo. В ее основу были положены следующие допущения:
@@ -18,30 +17,30 @@ public class Model {
      *     7) R(t)=const в интервале между двумя смежными моментами появления ошибок.
      */
     public dto.EstimationResult estimate(double[] bugIntervals) {
-
-        var B0 = bugIntervals.length;
-
         var actualTime = actualTime(bugIntervals);
 
         var B = solve(
-            0,
-            B0,
+            bugIntervals.length + 1,
             0.01,
             (Double Bj) -> expectedTime(Bj, bugIntervals),
-            (Double) -> actualTime
+            (_) -> actualTime
         );
-
-        if (!Double.isFinite(B)) {
-            return new dto.EstimationResult(
-                Double.POSITIVE_INFINITY,
-                Double.POSITIVE_INFINITY,
-                Double.POSITIVE_INFINITY
-            );
-        }
 
         var K = K(B, bugIntervals);
 
-        var nextBugTime = 1. / K / (B - bugIntervals.length - 1);
+        var nextBugTime = 0.0;
+
+        if (B >= bugIntervals.length) {
+            nextBugTime = 1. / K / (B - bugIntervals.length - 1);
+        }
+
+        if (B >= MAX_POSSIBLE_BUG_COUNT) {
+            return new dto.EstimationResult(
+                Double.POSITIVE_INFINITY,
+                nextBugTime,
+                Double.POSITIVE_INFINITY
+            );
+        }
 
         double sumTimes = 0.0;
         for (int i = 1; i <= B - bugIntervals.length; i++) {
@@ -57,56 +56,43 @@ public class Model {
         );
     }
 
-    private double solve(double initialX, double initialXStep, double minXStep, Function<Double, Double> a, Function<Double, Double> b) {
-        return solve(initialX, initialXStep, minXStep, a, b, 0);
-    }
+    private double solve(double initialX, double minXStep, Function<Double, Double> a, Function<Double, Double> b) {
+        var Xmin = initialX;
+        var Xmax = MAX_POSSIBLE_BUG_COUNT;
+        var leftA = a.apply(Xmin);
+        var leftB = b.apply(Xmin);
+        var rightA = a.apply(Xmax);
+        var rightB = b.apply(Xmax);
+        var leftSign = Math.signum(leftA - leftB);
+        var rightSign = Math.signum(rightA - rightB);
 
-    private double solve(double initialX, double initialXStep, double minXStep, Function<Double, Double> a, Function<Double, Double> b, int retry) {
-        if (retry >= MAX_RETRIES) {
-            throw new RuntimeException("Too many retries");
-        }
-
-        double prevSign = 0.0;
-        double maxValue = 0.0;
-        var X = initialX;
-        var XStep = initialXStep;
         do {
-            X += XStep;
-            Double valueA = a.apply(X);
-            Double valueB = b.apply(X);
-            double newSign = Math.signum(valueA - valueB);
-
-            if (X > MAX_POSSIBLE_BUG_COUNT) {
-                return solve(initialX, initialXStep / 3, minXStep, a, b, retry + 1);
+            if (leftSign == rightSign) {
+                return Xmax;
             }
 
-            if (newSign == 0.0) {
-                return X;
-            }
+            var Xmid = 0.5 * (Xmax + Xmin);
+            var midA = a.apply(Xmid);
+            var midB = b.apply(Xmid);
 
-            if (prevSign == 0.0) {
-                prevSign = newSign;
-            }
+            var midSign = Math.signum(midA - midB);
 
-            if (prevSign != newSign) {
-                maxValue = X;
-            }
-
-            if (maxValue > 0.0) {
-                XStep *= prevSign * newSign * 0.5;
+            if (midSign != leftSign) {
+                Xmax = Xmid;
+                rightSign = midSign;
             } else {
-                XStep *= 2;
+                Xmin = Xmid;
+                leftSign = midSign;
             }
-            prevSign = newSign;
-        } while (Math.abs(XStep) > minXStep);
+        } while (Xmax - Xmin > minXStep);
 
-        return X;
+        return 0.5 * (Xmax + Xmin);
     }
 
     public double expectedTime(double B, double[] X) {
         double sum = 0.0;
         for (int i = 0; i < X.length; i++) {
-            sum += 1. / (B - 1 - i);
+            sum += 1. / (B - i);
         }
 
         return sum / K(B, X);
@@ -124,7 +110,7 @@ public class Model {
     public double K(double B, double[] X) {
         double sum = 0.0;
         for (int i = 0; i < X.length; i++) {
-            sum += (B - 1- i) * X[i];
+            sum += (B - i) * X[i];
         }
 
         return X.length / sum;
