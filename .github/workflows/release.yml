@@ -39,7 +39,6 @@ jobs:
 
       - name: Find and Rename JAR file
         run: |
-          # Ищем основной jar файл (не -sources, не -javadoc, не -all)
           MAIN_JAR=$(find build/libs -name '*.jar' -not -name '*-sources.jar' -not -name '*-javadoc.jar' -not -name '*-all.jar' | head -n 1)
           if [ -z "$MAIN_JAR" ]; then
             echo "Could not find main JAR file in build/libs/"
