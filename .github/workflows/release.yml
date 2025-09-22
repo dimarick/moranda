@@ -5,9 +5,7 @@ on:
     tags:
       - 'v*'
     branches:
-      - i5-CD_integration
-
-
+      - master
 
 jobs:
   build-and-release:
