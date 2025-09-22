@@ -1,3 +1,5 @@
+package moranda;
+
 import core.Model;
 
 import java.util.ArrayList;
