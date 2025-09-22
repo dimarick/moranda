@@ -1,0 +1,58 @@
+name: Release Jar
+
+on:
+  push:
+    tags:
+      - 'v*'
+    branches:
+      - master
+
+jobs:
+  build-and-release:
+    permissions: write-all
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: '8.13'
+
+      - name: Gradle version
+        run: gradle --version
+
+      - name: Установка Gradle wrapper
+        run: gradle wrapper --gradle-version=8.13
+
+      - name: Grant execute permission for Gradle
+        run: chmod +x gradlew
+
+      - name: Build jar
+        run: ./gradlew build
+
+      - name: Get tag name
+        id: vars
+        run: echo "TAG_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
+      - name: Rename JAR
+        run: |
+          mkdir -p release
+          cp build/libs/*.jar release/moranda-${TAG_NAME}.jar
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          name: Release ${{ env.TAG_NAME }}
+          files: release/moranda-${{ env.TAG_NAME }}.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
