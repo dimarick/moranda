@@ -1,80 +1,46 @@
-name: Release
+name: Release Jar
 
 on:
   push:
     tags:
       - 'v*'
+    branches:
+      - CD_integration
 
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v3
 
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
           distribution: 'temurin'
-          cache: 'gradle'
+          java-version: '17'
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+      - name: Grant execute permission for Gradle
+        run: chmod +x gradlew
 
-      - name: Build with Gradle
-        run: ./gradlew assemble -x test
+      - name: Build jar
+        run: ./gradlew clean build
 
-      - name: Get tag version
-        id: get_tag
+      - name: Get tag name
+        id: vars
+        run: echo "TAG_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
+      - name: Rename JAR
         run: |
-          TAG_NAME=${GITHUB_REF#refs/tags/}
-          echo "TAG_VERSION=${TAG_NAME}" >> $GITHUB_OUTPUT
-          echo "Using tag: $TAG_NAME"
-
-      - name: Find and Rename JAR file
-        run: |
-          MAIN_JAR=$(find build/libs -name '*.jar' -not -name '*-sources.jar' -not -name '*-javadoc.jar' -not -name '*-all.jar' | head -n 1)
-          if [ -z "$MAIN_JAR" ]; then
-            echo "Could not find main JAR file in build/libs/"
-            exit 1
-          fi
-          echo "Found main JAR: $MAIN_JAR"
-          cp "$MAIN_JAR" "moranda-${{ steps.get_tag.outputs.TAG_VERSION }}.jar"
-          echo "Renamed to: moranda-${{ steps.get_tag.outputs.TAG_VERSION }}.jar"
-
-      - name: Generate Release Notes
-        id: generate_notes
-        uses: actions/github-script@v6
-        with:
-          result-encoding: string
-          script: |
-            try {
-              const { data: notes } = await github.rest.repos.generateReleaseNotes({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                tag_name: process.env.GITHUB_REF.replace('refs/tags/', ''),
-                target_commitish: 'i5-variant-1'
-              });
-              return notes.body;
-            } catch (error) {
-              core.setFailed('Failed to generate release notes: ' + error.message);
-              return 'Автоматически собранный релиз';
-            }
+          mkdir -p release
+          cp build/libs/*.jar release/moranda-${TAG_NAME}.jar
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
-          body: ${{ steps.generate_notes.outputs.result }}
-          files: |
-            moranda-${{ steps.get_tag.outputs.TAG_VERSION }}.jar
-          generate_release_notes: false
+          tag_name: ${{ env.TAG_NAME }}
+          name: Release ${{ env.TAG_NAME }}
+          files: release/moranda-${{ env.TAG_NAME }}.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
