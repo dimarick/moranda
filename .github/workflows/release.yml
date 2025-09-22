@@ -7,8 +7,11 @@ on:
     branches:
       - CD_integration
 
+
+
 jobs:
   build-and-release:
+    permissions: write-all
     runs-on: ubuntu-latest
 
     steps:
