@@ -35,7 +35,7 @@ class ModelTest {
         assertEquals(tk, partTime + result.getTotalTestingTime(), tk / 10000);
     }
     @Test
-    public void testEstimateVariant5() {
+    public void testEstimateVariant1() {
         var X = new double[]{9,12,11,4,7,2,5,8,5,7,1,6,1,9,4,1,3,3,6,1,11,33,7,91,2,1};
 
         var m = new Model();
@@ -45,6 +45,18 @@ class ModelTest {
         assertEquals(32, result.getTotalBugs(), 1);
         assertEquals(34, result.getNextBugTime(), 1);
         assertEquals(333, result.getTotalTestingTime(), 1);
+    }
+    @Test
+    public void testEstimateVariant3() {
+        var X = new double[]{5,4,11,13,6,2,7,5,8,7,1,4,2,7,6,2,3,1,4,78,25,10,7,16,3,1,2};
+
+        var m = new Model();
+
+        var result = m.estimate(X);
+
+        assertEquals(45, result.getTotalBugs(), 1);
+        assertEquals(15, result.getNextBugTime(), 1);
+        assertEquals(958, result.getTotalTestingTime(), 1);
     }
     @Test
     public void testEstimateCase1() {
